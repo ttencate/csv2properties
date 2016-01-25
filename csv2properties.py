@@ -1,19 +1,12 @@
 #!/usr/bin/python3
 
+import argparse
 import csv
 import os.path
 import re
 import sys
 
-USAGE = '''Usage: csv2properties CSV_FILE OUT_DIR [PREFIX]
-
-Reads a CSV file (e.g. exported from Google Sheets) and converts it to a series
-of .properties files used for localization.
-
-If CSV_FILE is "-", input is read from stdin.
-
-If PREFIX is not given, it defaults to "strings", resulting in files named
-"strings.properties", "strings_en_US.properties", and so on.'''
+DESCRIPTION='Reads a CSV file (e.g. exported from Google Sheets) and converts it to a series of .properties files used for localization.'
 
 def open_input(file_name):
     if file_name == '-':
@@ -46,19 +39,17 @@ def parse_input(input):
     return outputs
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print(USAGE, file=sys.stderr)
-        sys.exit(0)
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser.add_argument('csv_file', help='CSV file to read from; "-" to read from stdin')
+    parser.add_argument('out_dir', help='output directory to write .properties files to')
+    parser.add_argument('--prefix', default='strings', help='prefix for generated .properties files; defaults to "strings"')
+    args = parser.parse_args()
 
-    file_name = sys.argv[1]
-    out_dir = sys.argv[2]
-    prefix = sys.argv[3] if len(sys.argv) > 3 else 'strings'
-
-    with open_input(file_name) as input:
+    with open_input(args.csv_file) as input:
         data = parse_input(input)
 
     for suffix, lines in data.items():
-        output_file_name = os.path.join(out_dir, prefix + suffix + '.properties')
+        output_file_name = os.path.join(args.out_dir, args.prefix + suffix + '.properties')
         print('Writing %s...' % output_file_name, file=sys.stderr)
         with open(output_file_name, 'w', encoding='utf8') as output:
             for line in lines:
