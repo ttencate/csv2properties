@@ -39,3 +39,5 @@ Note:
   explicitly fall back to the default translation. If you actually want to
   include an empty translation in the output file, write `***EMPTY***`.
 - Input and output must be in UTF-8 encoding.
+
+Run the script without arguments for usage instructions.
