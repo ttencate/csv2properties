@@ -7,6 +7,12 @@ recommended for easy collaboration, but Excel is presumably also possible).
 These can subsequently be exported to a CSV file and turned into a bundle of
 `.properties` files which are understood by Java.
 
+## Usage
+
+Run the script without arguments for usage instructions.
+
+## Input format
+
 The input spreadsheet should have the following format:
 
     Key         Description                        _de_DE           _es
@@ -40,4 +46,18 @@ Note:
   include an empty translation in the output file, write `***EMPTY***`.
 - Input and output must be in UTF-8 encoding.
 
-Run the script without arguments for usage instructions.
+## Generating Java code
+
+The script can also generate a Java enum class, to ensure at compile time that
+string keys referred to in the source are actually valid:
+
+    package my.awesome.fart.app;
+
+    public enum Strings {
+        app_name,
+        fart_now,
+    }
+
+So instead of `"app_name"`, you would write `Strings.app_name.name()`. You can
+also create a helper method which accepts an argument of type `Strings` and
+returns the localized string.
