@@ -58,7 +58,7 @@ if __name__ == '__main__':
     parser.add_argument('csv_file', help='CSV file to read from; "-" to read from stdin')
     parser.add_argument('--properties_dir', default='.', help='output directory to write .properties files to; defaults to the current directory')
     parser.add_argument('--properties_prefix', default='strings', help='prefix for generated .properties files; defaults to "strings"')
-    parser.add_argument('--java_dir', help='directory to output Java sources to (excluding package subdirs)')
+    parser.add_argument('--java_dir', default='.', help='directory to output Java sources to (excluding package subdirs); defaults to the current directory')
     parser.add_argument('--java_enum', help='fully qualified name of Java enum to generate')
     args = parser.parse_args()
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
             for line in lines:
                 print(line, file=output)
 
-    if args.java_enum and args.java_dir:
+    if args.java_enum:
         java_file_name = os.path.join(args.java_dir, args.java_enum.replace('.', os.sep) + '.java')
         print('Writing %s...' % java_file_name, file=sys.stderr)
         with open(java_file_name, 'w', encoding='utf8') as java_output:
